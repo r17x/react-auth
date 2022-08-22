@@ -9,7 +9,7 @@ import { ifElse, noOp } from "./fp";
  * @var {boolean}
  */
 export const isBrowser = (() =>
-  process.browser || typeof window !== "undefined")(); 
+  process.browser || typeof window !== "undefined")();
 /**
  * @method atob
  * @memberof browser
@@ -19,7 +19,7 @@ export const isBrowser = (() =>
 export const atob = ifElse(
   isBrowser,
   (str) => window.atob(str),
-  (str) => Buffer.from(str, 'base64').toString('binary')
+  (str) => Buffer.from(str, "base64").toString("binary")
 );
 /**
  * @method btoa
@@ -30,7 +30,7 @@ export const atob = ifElse(
 export const btoa = ifElse(
   isBrowser,
   (str) => window.btoa(str),
-  (str) => Buffer.from(str, 'binary').toString("base64")
+  (str) => Buffer.from(str, "binary").toString("base64")
 );
 
 /**

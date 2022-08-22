@@ -2,14 +2,14 @@
  * @namespace Hooks
  */
 import { useContextWithSelector } from "./context";
-import { decode } from "./jwt";
+import { decoded as decode } from "./jwt";
 
 const signInSelector = (v) => v.signIn;
 const signOutSelector = (v) => v.signOut;
-const authSelector = (v) => ({
-  isAuthenticated: v.isAuthenticated,
-  accessToken: v.accessToken,
-  refreshToken: v.refreshToken,
+const authSelector = ({ isAuthenticated, accessToken, refreshToken }) => ({
+  isAuthenticated,
+  accessToken,
+  refreshToken,
 });
 const accessTokenSelector = (v) => v.accessToken;
 /**
