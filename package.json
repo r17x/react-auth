@@ -1,16 +1,18 @@
 {
-  "name": "react-auths",
+  "name": "use-auth",
   "version": "0.0.0",
   "license": "MIT",
   "source": "src/index.js",
   "main": "./dist/index.cjs",
   "scripts": {
+    "build": "microbundle build src/index.js",
     "docs": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
     "better-docs": "^2",
     "jsdoc": "^3",
     "microbundle": "^0",
+    "prettier": "^2",
     "react": "^17",
     "react-dom": "^17"
   },
