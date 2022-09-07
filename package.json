@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "source": "src/index.js",
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "microbundle build src/index.js",
     "docs": "jsdoc -c jsdoc.json"
