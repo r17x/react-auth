@@ -2,13 +2,10 @@ import { compose, ifElse, map } from "./fp";
 import { atob, btoa } from "./browser";
 
 /**
+ * [JWS Overview](https://www.rfc-editor.org/rfc/rfc7515.html#section-3)
  * @typedef {object} JWS - JSON Web Signature
  * @property {string} header - encoded header
  * @property {string} payload - encoded payload
- */
-
-/**
- * [JWS Overview](https://www.rfc-editor.org/rfc/rfc7515.html#section-3)
  */
 const replaceMinToPlus = (str) => str.replace("-", "+");
 const replacePlusToMin = (str) => str.replace("+", "-");
@@ -25,6 +22,9 @@ const removePadding = (s) => s.replace(/=+$/, "");
 const toBase64 = compose(replaceMinToPlus, replaceUnderscoreToSlash);
 const toBase64URL = compose(replaceSlashToUnderscore, replacePlusToMin);
 
+const toStructJWS = ([header, payload /*signature*/]) => ({ header, payload });
+const toTupleJWS = ({ header, payload /*signature*/ }) => [header, payload];
+
 /**
  * decrypt string of token to be string of JWT payload
  *
@@ -33,10 +33,6 @@ const toBase64URL = compose(replaceSlashToUnderscore, replacePlusToMin);
  */
 export const decrypt = compose(toBase64, atob);
 export const encrypt = compose(btoa, toBase64URL);
-
-const toStructJWS = ([header, payload /*signature*/]) => ({ header, payload });
-const toTupleJWS = ({ header, payload /*signature*/ }) => [header, payload];
-
 /**
  * Decoded Token to structured object with properties header, payload, and (REMOVED) signature.
  *
@@ -55,7 +51,7 @@ export const decoded = compose(
   ([a, b]) => [a, addPadding(b)],
   map(decrypt),
   map(JSON.parse),
-  toStructJWS
+  toStructJWS,
 );
 /**
   * Encoded JWT Payload to decoded Token string
@@ -92,16 +88,3 @@ export const isTokenExpired = compose(decoded, ({ exp }) =>
     () => true
   )
 );
-/** TEST
-
-const inputJWT =     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWdlIjoxMiwiam9icyI6WyJzZWN1cml0eSIsImVuZ2luZWVyIl0sImlhdCI6MTUxNjIzOTAyMn0";
-
-const decodedToken = decoded(inputJWT)
-
-const encodedToken = encoded(decodedToken)
-
-console.log(
-  {inputJWT, decodedToken, encodedToken, isValid: inputJWT === encodedToken}
-)
-
-*/
