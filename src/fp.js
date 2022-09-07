@@ -46,7 +46,7 @@ export const ifElse =
   *
   * fx(add2, 2) // 4
   */
-const log = (a) => {
+export const log = (a) => {
   notEq(String(process.env.NODE_ENV).toLowerCase(), "production") &&
     console.log(a);
   return a;
