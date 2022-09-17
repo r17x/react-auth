@@ -32,6 +32,11 @@ const toTupleJWS = ({ header, payload /*signature*/ }) => [header, payload];
  * @return {string}
  */
 export const decrypt = compose(toBase64, atob);
+/**
+  * encrypt (JSON) string of JWT Payload to be string token
+  * @param {string} JWT - JWT
+  * @return {string}
+  */
 export const encrypt = compose(btoa, toBase64URL);
 /**
  * Decoded Token to structured object with properties header, payload, and (REMOVED) signature.
@@ -53,6 +58,7 @@ export const decoded = compose(
   map(JSON.parse),
   toStructJWS,
 );
+
 /**
   * Encoded JWT Payload to decoded Token string
   * @param {JWS} decodedToken
@@ -62,8 +68,8 @@ export const encoded = compose(
   toTupleJWS,
   map(JSON.stringify),
   map(encrypt),
+  ([a, b]) => [a, removePadding(b)],
   joinByDot,
-  removePadding
 );
 
 const isExpired = (exp) =>
@@ -75,13 +81,13 @@ const isExpired = (exp) =>
  * @param {string} token
  * @return {Boolean}
  * @example
- * import { isTokenExpired } from '..'
+ * import { isExpired } from '..'
  *
  * const token = '//some token'
  *
- * isTokenExpired(token)
+ * isExpired(token)
  */
-export const isTokenExpired = compose(decoded, ({ exp }) =>
+export const isExpired = compose(decoded, ({ exp }) =>
   ifElse(
     exp,
     () => isExpired(exp),
